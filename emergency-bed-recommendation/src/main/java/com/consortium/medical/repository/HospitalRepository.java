@@ -1,3 +1,4 @@
+// src/main/java/com/consortium/medical/repository/HospitalRepository.java
 package com.consortium.medical.repository;
 
 import com.consortium.medical.model.Hospital;

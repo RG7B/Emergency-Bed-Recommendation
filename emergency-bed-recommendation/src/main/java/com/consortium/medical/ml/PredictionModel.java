@@ -1,7 +1,8 @@
 package com.consortium.medical.ml;
 
+import org.springframework.stereotype.Component;
 import weka.classifiers.Classifier;
-import weka.classifiers.functions.MultilayerPerceptron;
+import weka.classifiers.trees.J48;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -9,6 +10,7 @@ import weka.core.Instances;
 /**
  * Modèle de prédiction utilisant Weka.
  */
+@Component
 public class PredictionModel {
 
     private Classifier classifier;
@@ -22,7 +24,7 @@ public class PredictionModel {
         dataset = DataPreparation.getDataset();
 
         // Initialiser le classifieur
-        classifier = new MultilayerPerceptron(); // Réseau de neurones
+        classifier = new J48(); // Arbre de décision
 
         // Entraîner le modèle
         classifier.buildClassifier(dataset);
@@ -30,15 +32,17 @@ public class PredictionModel {
 
     /**
      * Prédit l'hôpital le plus approprié.
+     *
+     * @param latitude         La latitude du patient
+     * @param longitude        La longitude du patient
+     * @param symptomSeverity  La gravité des symptômes
+     * @return L'identifiant de l'hôpital prédit
+     * @throws Exception En cas d'erreur lors de la prédiction
      */
     public String predictHospital(double latitude, double longitude, int symptomSeverity) throws Exception {
-        // Créer une nouvelle instance à prédire en utilisant DenseInstance
+        // Créer une nouvelle instance à prédire
         Instance instance = new DenseInstance(dataset.numAttributes());
-
-        // Associer cette instance au dataset
         instance.setDataset(dataset);
-
-        // Définir les valeurs pour chaque attribut en utilisant l'attribut du dataset
         instance.setValue(dataset.attribute("latitude"), latitude);
         instance.setValue(dataset.attribute("longitude"), longitude);
         instance.setValue(dataset.attribute("symptom_severity"), symptomSeverity);
@@ -51,7 +55,7 @@ public class PredictionModel {
             throw new Exception("Le modèle n'a pas pu faire de prédiction valide.");
         }
 
-        // Obtenir la valeur prédite pour l'attribut class (hospital_id)
+        // Obtenir la valeur prédite pour l'attribut classe (hospital_id)
         String predictedHospitalId = dataset.classAttribute().value((int) result);
 
         return predictedHospitalId;

@@ -7,6 +7,7 @@ import com.consortium.medical.exception.PredictionException;
 import com.consortium.medical.ml.PredictionModel;
 import com.consortium.medical.model.Hospital;
 import com.consortium.medical.repository.HospitalRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,19 +21,24 @@ public class BedRecommendationService {
     private final HospitalRepository hospitalRepository;
     private final PredictionModel predictionModel;
 
-    // Constructeur par défaut
-    public BedRecommendationService(HospitalRepository hospitalRepository) throws Exception {
-        this(hospitalRepository, new PredictionModel());
-    }
-
-    // Constructeur pour les tests
-    public BedRecommendationService(HospitalRepository hospitalRepository, PredictionModel predictionModel) {
+    /**
+     * Constructeur avec injection des dépendances.
+     */
+    @Autowired
+    public BedRecommendationService(HospitalRepository hospitalRepository, PredictionModel predictionModel) throws PredictionException {
         this.hospitalRepository = hospitalRepository;
-        this.predictionModel = predictionModel;
+        try {
+            this.predictionModel = predictionModel;
+        } catch (Exception e) {
+            throw new PredictionException("Erreur lors de l'initialisation du modèle de prédiction", e);
+        }
     }
 
     /**
      * Méthode pour trouver un lit disponible.
+     *
+     * @param request La requête de recommandation de lit
+     * @return La réponse contenant l'hôpital recommandé
      */
     public BedRecommendationResponse findAvailableBed(BedRecommendationRequest request) {
         int symptomSeverity = evaluateSymptomSeverity(request.getSymptoms());
@@ -58,14 +64,20 @@ public class BedRecommendationService {
 
     /**
      * Évaluation simplifiée de la gravité des symptômes.
+     *
+     * @param symptoms Les symptômes du patient
+     * @return Un entier représentant la gravité des symptômes
      */
     private int evaluateSymptomSeverity(String symptoms) {
-        if (symptoms.toLowerCase().contains("douleurs thoraciques")) {
+        String symptomsLower = symptoms.toLowerCase();
+        if (symptomsLower.contains("douleurs thoraciques")) {
             return 9;
-        } else if (symptoms.toLowerCase().contains("fièvre")) {
+        } else if (symptomsLower.contains("fièvre")) {
             return 5;
+        } else if (symptomsLower.contains("éruption") || symptomsLower.contains("rash")) {
+            return 2;
         } else {
-            return 3;
+            return 3; // Gravité par défaut
         }
     }
 }

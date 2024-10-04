@@ -20,7 +20,8 @@ public class BedRecommendationServiceTest {
     @BeforeEach
     public void setUp() throws Exception {
         hospitalRepository = new HospitalRepository();
-        bedService = new BedRecommendationService(hospitalRepository);
+        PredictionModel predictionModel = new PredictionModel();
+        bedService = new BedRecommendationService(hospitalRepository, predictionModel);
     }
 
     @Test
@@ -40,7 +41,7 @@ public class BedRecommendationServiceTest {
 
     @Test
     public void testFindAvailableBed_NoAvailableBed() {
-        // Vider la liste des hôpitaux pour simuler l'absence d'hôpitaux
+        // Supprimer tous les hôpitaux pour simuler qu'aucun hôpital n'est disponible
         hospitalRepository.findAll().clear();
 
         BedRecommendationRequest request = new BedRecommendationRequest();

@@ -33,6 +33,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- Spring Boot Starter Thymeleaf -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -40,6 +46,7 @@
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- Spring Boot Starter Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,12 +60,23 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <!-- Weka pour le Machine Learning -->
         <dependency>
             <groupId>nz.ac.waikato.cms.weka</groupId>
             <artifactId>weka-stable</artifactId>
             <version>3.8.6</version>
         </dependency>
+
+        <!-- Si `MultilayerPerceptron` n'est pas disponible, utilisez `weka-dev` -->
+        <!--
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-dev</artifactId>
+            <version>3.9.6</version>
+        </dependency>
+        -->
+
         <!-- Mockito pour les tests -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -66,6 +84,9 @@
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- SLF4J pour la journalisation (inclus par Spring Boot) -->
+        <!-- Pas besoin d'ajouter explicitement slf4j-api -->
     </dependencies>
 
     <build>

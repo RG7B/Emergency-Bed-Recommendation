@@ -26,7 +26,7 @@ public class BedRecommendationControllerTest {
         BedRecommendationResponse expectedResponse = new BedRecommendationResponse("1", "Hôpital A");
         when(bedService.findAvailableBed(request)).thenReturn(expectedResponse);
 
-        ResponseEntity<BedRecommendationResponse> response = controller.recommendBed(request);
+        ResponseEntity<BedRecommendationResponse> response = controller.recommendBedApi(request);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(expectedResponse, response.getBody());
@@ -43,7 +43,7 @@ public class BedRecommendationControllerTest {
         request.setSymptoms("");
 
         assertThrows(InvalidInputException.class, () -> {
-            controller.recommendBed(request);
+            controller.recommendBedApi(request);
         });
     }
 }
