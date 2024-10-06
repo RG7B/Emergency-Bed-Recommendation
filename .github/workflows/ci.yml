@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -21,19 +20,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Cache Maven packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-m2-
-
     - name: Build with Maven
-      run: mvn clean install
+      run: |
+        cd emergency-bed-recommendation 
+        mvn clean install
 
     - name: Build Docker image
-      run: docker build -t RG7B/emergency-bed-recommendation:latest .
+      run: |
+        cd emergency-bed-recommendation  
+        docker build -t RG7B/emergency-bed-recommendation:latest .
 
     - name: Login to Docker Hub
       uses: docker/login-action@v2
