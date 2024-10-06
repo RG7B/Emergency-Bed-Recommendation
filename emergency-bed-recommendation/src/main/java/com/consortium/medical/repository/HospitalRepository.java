@@ -1,5 +1,4 @@
-// src/main/java/com/consortium/medical/repository/HospitalRepository.java
-package com.consortium.medical.repository;
+package com.consortium.medical.repository; 
 
 import com.consortium.medical.model.Hospital;
 import org.springframework.stereotype.Repository;
@@ -20,10 +19,10 @@ public class HospitalRepository {
      * Constructeur initialisant les données simulées.
      */
     public HospitalRepository() {
-        hospitals.add(new Hospital("1", "Hôpital A", 5, 48.8566, 2.3522));
-        hospitals.add(new Hospital("2", "Hôpital B", 0, 48.8666, 2.3522));
-        hospitals.add(new Hospital("3", "Hôpital C", 2, 48.8566, 2.3622));
-        hospitals.add(new Hospital("4", "Hôpital D", 10, 48.8466, 2.3522));
+        hospitals.add(new Hospital("1", "Hôpital A", "Adresse A", 5, 48.8566, 2.3522));
+        hospitals.add(new Hospital("2", "Hôpital B", "Adresse B", 0, 48.8666, 2.3522));
+        hospitals.add(new Hospital("3", "Hôpital C", "Adresse C", 2, 48.8566, 2.3622));
+        hospitals.add(new Hospital("4", "Hôpital D", "Adresse D", 10, 48.8466, 2.3522));
     }
 
     /**
@@ -34,7 +33,7 @@ public class HospitalRepository {
     }
 
     /**
-     * Récupérer un hôpital par son identifiant.
+     * Trouver un hôpital par son ID.
      */
     public Optional<Hospital> findById(String id) {
         return hospitals.stream()

@@ -40,6 +40,11 @@ public class PredictionModel {
      * @throws Exception En cas d'erreur lors de la prédiction
      */
     public String predictHospital(double latitude, double longitude, int symptomSeverity) throws Exception {
+        // Valider les entrées
+        if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180 || symptomSeverity < 1 || symptomSeverity > 10) {
+            throw new IllegalArgumentException("Valeurs d'entrée invalides.");
+        }
+
         // Créer une nouvelle instance à prédire
         Instance instance = new DenseInstance(dataset.numAttributes());
         instance.setDataset(dataset);

@@ -54,10 +54,16 @@ public class BedRecommendationController {
         request.setSymptoms(symptoms);
 
         try {
+            // Valider la requête
+            validateRequest(request);
+
             BedRecommendationResponse response = bedService.findAvailableBed(request);
             model.addAttribute("hospitalId", response.getHospitalId());
             model.addAttribute("hospitalName", response.getHospitalName());
             return "result";
+        } catch (InvalidInputException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
         } catch (NoAvailableBedException | PredictionException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";

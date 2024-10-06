@@ -25,13 +25,9 @@ public class BedRecommendationService {
      * Constructeur avec injection des dépendances.
      */
     @Autowired
-    public BedRecommendationService(HospitalRepository hospitalRepository, PredictionModel predictionModel) throws PredictionException {
+    public BedRecommendationService(HospitalRepository hospitalRepository, PredictionModel predictionModel) {
         this.hospitalRepository = hospitalRepository;
-        try {
-            this.predictionModel = predictionModel;
-        } catch (Exception e) {
-            throw new PredictionException("Erreur lors de l'initialisation du modèle de prédiction", e);
-        }
+        this.predictionModel = predictionModel;
     }
 
     /**
@@ -41,6 +37,10 @@ public class BedRecommendationService {
      * @return La réponse contenant l'hôpital recommandé
      */
     public BedRecommendationResponse findAvailableBed(BedRecommendationRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("La requête ne peut pas être nulle");
+        }
+
         int symptomSeverity = evaluateSymptomSeverity(request.getSymptoms());
 
         String predictedHospitalId;
@@ -68,7 +68,11 @@ public class BedRecommendationService {
      * @param symptoms Les symptômes du patient
      * @return Un entier représentant la gravité des symptômes
      */
-    private int evaluateSymptomSeverity(String symptoms) {
+    int evaluateSymptomSeverity(String symptoms) {
+        if (symptoms == null || symptoms.isEmpty()) {
+            throw new IllegalArgumentException("Les symptômes ne peuvent pas être vides");
+        }
+
         String symptomsLower = symptoms.toLowerCase();
         if (symptomsLower.contains("douleurs thoraciques")) {
             return 9;
@@ -81,3 +85,4 @@ public class BedRecommendationService {
         }
     }
 }
+
